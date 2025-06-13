@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="ZhApi.WpfApp.LogItems.DataBaseUnit"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ZhApi.WpfApp.LogItems"
+             mc:Ignorable="d"
+             xmlns:Interaction="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             Visibility="{Binding Visibility}"
+             >
+    <UserControl.Resources>
+        <Style TargetType="ui:SymbolIcon" >
+            <Setter Property="FontSize" Value="{Binding IconFontSize}"/>
+        </Style>
+        <Style TargetType="TextBlock" >
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="{Binding FontSize}"/>
+        </Style>
+    </UserControl.Resources>
+    <d:UserControl.DataContext>
+        <local:DataBaseUnitViewModel
+            Count="11"
+            />
+    </d:UserControl.DataContext>
+    <StackPanel Orientation="Horizontal">
+        <!-- 图标 -->
+        <TextBlock
+            Foreground="{Binding ValueBrush}">
+            <ui:SymbolIcon Symbol="{Binding Symbol}"/>
+        </TextBlock>
+        <!-- 值 -->
+        <TextBlock
+            Foreground="{Binding ValueBrush}"
+            Text="{Binding Count,StringFormat=' {0:N0}'}"/>
+
+        <!-- 增加值 -->
+        <Border
+            Opacity="0.8"
+            CornerRadius="3"
+            Margin="5,0,0,0"
+            Height="15"
+            Background="{Binding ChangedBrush}" >
+
+            <TextBlock
+                MinWidth="30"
+                FontSize="10"
+                Foreground="Black"
+                VerticalAlignment="Center"
+                TextAlignment="Center"
+                Text="{Binding ChangedValue,StringFormat=' +{0:N0} '}"/>
+
+        </Border>
+    </StackPanel>
+</UserControl>

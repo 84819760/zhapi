@@ -1,0 +1,9 @@
+﻿global using Microsoft.Extensions.AI;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using ShadowCode;
+global using System.Diagnostics;
+global using ZhApi.Cores;
+global using ZhApi.Interfaces;
+global using ZhApi.MicrosoftAI.Base;
+global using ZhApi.SqliteDataBase;

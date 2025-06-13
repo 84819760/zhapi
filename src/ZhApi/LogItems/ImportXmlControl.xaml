@@ -1,0 +1,139 @@
+﻿<UserControl x:Class="ZhApi.WpfApp.LogItems.ImportXmlControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ZhApi.WpfApp.LogItems"
+             mc:Ignorable="d"
+             Foreground="{DynamicResource TextE6}"
+             xmlns:Interaction="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             d:DesignHeight="450" d:DesignWidth="800"
+             >
+    <d:UserControl.DataContext>
+        <local:ImportXmlControlViewModel
+            Error ="异常内容"
+            DirectoryName="目录名称"
+            FileName="文件名"
+            TitleVisibility="Collapsed"
+            Progress="0.5"
+            ChildTotal="100"
+            ChildValue="30"
+            ChildProgressVisibility="Visible"
+            />
+    </d:UserControl.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.8*" />
+            <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel VerticalAlignment="Bottom" Margin="10,0" >
+            <!-- 目录和文件名 -->
+            <TextBlock Text="{Binding DirectoryName}"
+                       FontSize="18"
+                       TextWrapping="Wrap"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Margin="0,10" />
+
+            <!-- 文件名 -->
+            <TextBlock Text="{Binding FileName}"
+                       TextWrapping="Wrap"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       />
+        </StackPanel>
+
+        <!-- 标题 加载 错误-->
+        <StackPanel Grid.Row="1">
+
+            <!-- 标题 加载-->
+            <StackPanel
+                Orientation="Horizontal"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Center">
+                <!-- 标题 -->
+                <TextBlock Text="{Binding Title}" FontSize="30"
+                           Padding="10,0"
+                           Visibility="{Binding TitleVisibility}" />
+
+                <!-- 加载 -->
+                <ProgressBar IsIndeterminate="True" Width="30"
+                             Visibility="{Binding LoadingVisibility}" />
+            </StackPanel>
+
+            <!-- 错误 -->
+            <TextBlock Text="{Binding Error}"
+                       Visibility="{Binding Error,
+                       Converter={StaticResource notDefautVisibility}}"
+                       Padding="10,0"
+                       TextWrapping="Wrap"
+                       Foreground="White"
+                       Background="DarkRed" />
+
+            <!-- 进度 -->
+            <StackPanel Margin="0,10,0,0"
+                        HorizontalAlignment="Center"
+                        Visibility="{Binding TitleVisibility,
+                        Converter={StaticResource notVisibility}}">
+
+                <ProgressBar Maximum="1"  Width="100"
+                             HorizontalAlignment="Center"
+                             IsIndeterminate="{Binding IsIndeterminate}"
+                             Value="{Binding ChildProgress,Mode=OneWay}" />
+
+                <TextBlock FontSize="35"
+                           HorizontalAlignment="Center"
+                           Text="{Binding Progress,
+                           Converter={StaticResource percentageFormat}}" />
+
+                <!-- 子进度 -->
+                <Grid Visibility="{Binding ChildProgressVisibility}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="{StaticResource Textdim}" />
+                            <Setter Property="FontSize" Value="11" />
+                        </Style>
+                    </Grid.Resources>
+
+                    <TextBlock Grid.Column="0"
+                               HorizontalAlignment="Left"
+                               Text="{Binding ChildTotal,StringFormat=' {0:N0}'}" />
+
+                    <TextBlock Grid.Column="1" Text=":" />
+
+                    <TextBlock Grid.Column="2"
+                               HorizontalAlignment="Right"
+                               Text="{Binding ChildValue,StringFormat='{}{0:N0} '}" />
+                </Grid>
+
+            </StackPanel>
+
+
+
+        </StackPanel>
+
+        <!-- 主页按钮 -->
+        <local:HomeAndStopButton
+            Grid.Row="1"
+            Margin="5"
+            HorizontalAlignment="Right" VerticalAlignment="Bottom"
+            DataContext="{Binding HomeStop}" />
+
+        <!-- 数据库 -->
+        <local:DataBase
+            Grid.Row="1"
+            Margin="10"
+            DataContext="{Binding DataBase}"
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Left" />
+    </Grid>
+</UserControl>
+

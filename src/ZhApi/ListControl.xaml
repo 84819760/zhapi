@@ -1,0 +1,63 @@
+﻿<UserControl xmlns:LogItems="clr-namespace:ZhApi.WpfApp.LogItems"  x:Class="ZhApi.WpfApp.ListControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ZhApi.WpfApp"
+             d:DataContext="{d:DesignInstance Type=local:ListControlViewModel}"
+             mc:Ignorable="d"
+             Foreground="{DynamicResource TextE6}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="5,5">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <ScrollViewer x:Name="ScrollViewer1">
+            <ItemsControl x:Name="ItemsControl1" ItemsSource="{Binding Items}"
+                          VirtualizingStackPanel.IsVirtualizing="True"
+                          VirtualizingStackPanel.VirtualizationMode="Recycling">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate >
+                        <ContentControl Content="{Binding Control}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <!-- 返回按钮 -->
+        <LogItems:HomeAndStopButton
+            Grid.Row="2"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            DataContext="{Binding HomeStop}" />
+
+        <!-- 数据库写入 -->
+        <LogItems:DataBase
+            Grid.Row="2"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Margin="0,0,0,5"
+            DataContext="{Binding DataBase}" />
+
+        <!-- 更新提示 -->
+        <StackPanel
+            Grid.Row="2" Grid.ColumnSpan="4"
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Center">
+            <LogItems:VersionControl DataContext="{Binding Version}" />
+
+            <CheckBox
+                Margin="0,0,0,-5"
+                Width="auto"
+                Content="完成时关机"
+                VerticalAlignment="Bottom"
+                IsEnabled="{Binding ShutdownEnabled}"
+                IsChecked="{Binding RunConfig.IsShutdown}">
+                <CheckBox.RenderTransform>
+                    <ScaleTransform ScaleX="0.8" ScaleY="0.8" CenterX="50" />
+                </CheckBox.RenderTransform>
+            </CheckBox>
+        </StackPanel>
+    </Grid>
+</UserControl>

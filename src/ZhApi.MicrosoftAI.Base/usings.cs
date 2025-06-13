@@ -1,0 +1,10 @@
+﻿global using Microsoft.Extensions.AI;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Logging;
+global using System.Diagnostics;
+global using System.Threading.Channels;
+global using ZhApi.Configs;
+global using ZhApi.Cores;
+global using ZhApi.Interfaces;
+global using ZhApi.Messages;

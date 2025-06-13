@@ -1,0 +1,92 @@
+﻿<UserControl x:Class="ZhApi.WpfApp.LogItems.DataBase"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ZhApi.WpfApp.LogItems"
+             mc:Ignorable="d"
+             Foreground="Gray"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:Interaction="http://schemas.microsoft.com/expression/2010/interactions"
+             >
+    <d:UserControl.DataContext>
+        <local:DataBaseViewModel/>
+    </d:UserControl.DataContext>
+    <UserControl.Resources>
+
+        <Style TargetType="ui:SymbolIcon" >
+            <Setter Property="FontSize" Value="19"/>
+        </Style>
+
+    </UserControl.Resources>
+    <StackPanel Orientation="Horizontal">
+
+        <!-- 默认图标 -->
+        <TextBlock
+            Visibility="{Binding SymbolVisibility}">
+            <ui:SymbolIcon
+                Symbol="DatabaseStack16"/>
+        </TextBlock>
+
+        <!-- 写入 -->
+        <local:DataBaseUnit
+            Margin="0,0,5,0"
+            DataContext="{Binding WriteRow}" />
+
+        <!-- 更新 -->
+        <local:DataBaseUnit
+            Margin="0,0,5,0"
+            DataContext="{Binding UpdateRow}"/>
+    </StackPanel>
+</UserControl>
+
+<!--
+
+
+<StackPanel
+ToolTip="写入行数"
+Visibility="{Binding WriteCountVisibility}"
+Orientation="Horizontal">
+
+
+<TextBlock Foreground="{Binding WriteBrush}">
+<Run/>
+<ui:SymbolIcon Symbol="DatabaseArrowDown20"/>
+</TextBlock>
+
+<TextBlock Name="WriteCountValue"
+Foreground="{Binding WriteBrush}"
+VerticalAlignment="Center"
+Text="{Binding WriteCount,StringFormat=' {0:N0} '}"/>
+</StackPanel>
+
+
+<StackPanel
+ToolTip="更新行数"
+Visibility="{Binding UpdateCountVisibility}"
+Orientation="Horizontal">
+<TextBlock Foreground="{Binding UpdateBrush}">
+<Run/>
+<ui:SymbolIcon Symbol="DatabaseArrowRight20"  />
+</TextBlock>
+<TextBlock
+Foreground="{Binding UpdateBrush}"
+VerticalAlignment="Center"
+Text="{Binding UpdateCount,StringFormat=' {0:N0} '}"/>
+
+<Border CornerRadius="3"
+Height="15"
+Background="LightPink" >
+
+<TextBlock
+FontSize="10"
+Foreground="Black"
+VerticalAlignment="Center"
+Text="{Binding UpdateCountValue,StringFormat=' +{0:N0} '}"/>
+
+</Border>
+
+
+</StackPanel>
+
+-->

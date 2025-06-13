@@ -1,0 +1,37 @@
+﻿<Application x:Class="ZhApi.WpfApp.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ZhApi.WpfApp"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             ThemeMode="Dark">
+    <Application.Resources>
+
+        <ResourceDictionary>
+
+            <SolidColorBrush x:Key="GreenYellow" Color="#afff00" />
+            <SolidColorBrush x:Key="LogOrange" Color="#FF8700" />
+            <SolidColorBrush x:Key="TextE6" Color="#e6e6e6" />
+            <SolidColorBrush x:Key="LogText" Color="#cccccc" />
+            <SolidColorBrush x:Key="Textdim" Color="#ABABAB" />
+            <SolidColorBrush x:Key="LightBlue" Color="#99EBFF" />
+
+            <SolidColorBrush x:Key="Stop" Color="#861B2D" />
+
+            <local:NotVisibility x:Key="notVisibility" />
+            <local:NotDefautVisibility x:Key="notDefautVisibility" />
+            <local:SecondFormat x:Key="secondFormat" />
+            <local:PercentageFormat x:Key="percentageFormat" />
+
+            <Style x:Key="Margin50_00" TargetType="FrameworkElement">
+                <Setter Property="Margin" Value="5,0,0,0" />
+            </Style>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ControlsDictionary />
+                <ResourceDictionary Source="pack://application:,,,/PresentationFramework.Fluent;component/Themes/Fluent.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </Application.Resources>
+</Application>

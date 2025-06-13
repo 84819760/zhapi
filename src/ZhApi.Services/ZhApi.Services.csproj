@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<ShadowCode_Injection_UseMethodName>UseZhApi_Services</ShadowCode_Injection_UseMethodName>
+		<RootNamespace>ZhApi</RootNamespace>
+		<NoWarn>IDE0130;CA2254;IDE0305</NoWarn>
+	</PropertyGroup>
+
+
+
+
+	<ItemGroup>
+		<ProjectReference Include="..\ZhApi.API.OpenAI\ZhApi.API.OpenAI.csproj" />
+		<ProjectReference Include="..\ZhApi.Base\ZhApi.Base.csproj" />
+		<ProjectReference Include="..\ZhApi.DataService\ZhApi.DataService.csproj" />
+		<ProjectReference Include="..\ZhApi.LocalOllama\ZhApi.LocalOllama.csproj" />
+		<ProjectReference Include="..\ZhApi.MicrosoftAI.Base\ZhApi.MicrosoftAI.Base.csproj" />
+		<ProjectReference Include="..\ZhApi.SqliteDataBase\ZhApi.SqliteDataBase.csproj" />
+
+		<PackageReference Include="ShadowCode.Injection" Version="*">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+</Project>

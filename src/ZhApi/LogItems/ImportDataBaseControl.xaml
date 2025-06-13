@@ -1,0 +1,110 @@
+﻿<UserControl xmlns:WpfApp="clr-namespace:ZhApi.WpfApp"  x:Class="ZhApi.WpfApp.LogItems.ImportDataBaseControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ZhApi.WpfApp.LogItems"
+             mc:Ignorable="d"
+             Foreground="{DynamicResource TextE6}"
+             xmlns:Interaction="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             d:Height="350" d:Width="650"
+             >
+    <d:UserControl.DataContext>
+        <local:ImportDataBaseControlViewModel
+            SourcePath="d:\123"
+            Error ="错误"
+            />
+    </d:UserControl.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <!-- 路径 -->
+        <TextBlock Grid.Column="0" Grid.ColumnSpan="3"
+                   Grid.Row="0"
+                   Visibility="{Binding SourcePath,
+                   Converter={StaticResource notDefautVisibility}}"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Bottom"
+                   Foreground="{StaticResource LogText}"
+                   Text="{Binding SourcePath,
+                   StringFormat='同步: {0}'}"
+                   Margin="30"
+                   TextWrapping="Wrap"
+                   />
+
+        <!-- 读取本地 写入到源 -->
+        <local:ImportDataBaseUnit
+            Opacity="{Binding Opacity}"
+            Grid.Row="1" Grid.Column="0"
+            HorizontalAlignment="Center"
+            DataContext="{Binding SourceDb}" />
+
+        <TextBlock Grid.Row="1" Grid.Column="1" x:Name="SyncTextBlock"
+                   RenderTransformOrigin="0.5,0.5"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   TextAlignment="Center"
+                   Visibility="{Binding AnimationVisibility}"
+                   FontFamily="{StaticResource SymbolThemeFontFamily}"
+                   FontSize="45" Text="&#xE895;" >
+
+            <TextBlock.RenderTransform>
+                <RotateTransform  x:Name="TextRotate" Angle="0" />
+            </TextBlock.RenderTransform>
+
+            <TextBlock.Triggers>
+                <EventTrigger RoutedEvent="TextBlock.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetName="TextRotate"
+                                Storyboard.TargetProperty="Angle"
+                                From="0" To="360" Duration="0:0:2"
+                                RepeatBehavior="Forever" />
+                        </Storyboard>
+
+                    </BeginStoryboard>
+                </EventTrigger>
+            </TextBlock.Triggers>
+        </TextBlock>
+
+        <!-- 读取源 写入到本地 -->
+        <local:ImportDataBaseUnit
+            Grid.Row="1" Grid.Column="2"
+            HorizontalAlignment="Center"
+            DataContext="{Binding LocalDb}" />
+
+        <!-- 标题 -->
+        <TextBlock Grid.Row="1" Grid.ColumnSpan="3"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontSize="30" Margin="10"
+                   Visibility="{Binding AnimationVisibility,
+                   Converter={StaticResource notVisibility}}"
+                   Text="{Binding Title}" />
+
+        <!-- 错误 -->
+        <TextBlock Grid.Row="2" Grid.ColumnSpan="3"
+                   Margin="0,0,0,60"
+                   Text="{Binding Error}"
+                   Visibility="{Binding Error,
+                   Converter={StaticResource notDefautVisibility}}"
+                   Background="DarkRed" Foreground="White" />
+
+        <!-- 返回按钮 -->
+        <local:HomeAndStopButton
+            Grid.Row="100" Grid.Column="100" Margin="10" Width="auto"
+            HorizontalAlignment="Right" VerticalAlignment="Bottom"
+            DataContext="{Binding HomeStop}" />
+    </Grid>
+</UserControl>

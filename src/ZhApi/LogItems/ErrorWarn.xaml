@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="ZhApi.WpfApp.LogItems.ErrorWarn"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ZhApi.WpfApp.LogItems"
+             mc:Ignorable="d"
+             xmlns:Interaction="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             d:DataContext="{d:DesignInstance Type=local:ErrorWarnViewModel}"
+             >
+    <!--<d:UserControl.DataContext>
+    <local:ErrorWarnViewModel
+    Visibility="Visible"
+    Total="100"
+    Current="50"
+    Warn="10"
+    Error="10"
+    Retry="10"
+    />
+    </d:UserControl.DataContext>-->
+
+    <!-- 不完整翻译 错误 不完整比例 重试 -->
+    <StackPanel Orientation="Horizontal"
+                Visibility="{Binding WarnErrorVisibility, Mode=OneWay}">
+
+        <TextBlock Text=" [" Foreground="{StaticResource Textdim}" />
+        <!-- 不完整翻译 -->
+        <TextBlock Visibility="{Binding WarnVisibility, Mode=OneWay}">
+            <Run FontFamily="{StaticResource SymbolThemeFontFamily}" Text="&#xE814;"
+                 Foreground="#FFD3DE0C" />
+            <Run Text="{Binding Warn,StringFormat='{}{0:N0}, '}"
+                 Foreground="{StaticResource LogText}" />
+        </TextBlock>
+
+        <!-- 错误 -->
+        <TextBlock Visibility="{Binding ErrorVisibility, Mode=OneWay}">
+            <Run FontFamily="{StaticResource SymbolThemeFontFamily}"
+                 Text="&#xEB90;"
+                 Foreground="Red" />
+            <Run Text="{Binding Error,StringFormat='{}{0:N0},'}"
+                 Foreground="{StaticResource LogText}" />
+        </TextBlock>
+
+        <!-- 不完整比例 -->
+        <TextBlock Text="{Binding WarnErrorRate,Mode=OneWay,
+                   Converter={StaticResource percentageFormat},
+                   StringFormat=' {0}'}"
+                   Foreground="GreenYellow" />
+        <TextBlock  Text="]" Foreground="{StaticResource Textdim}" />
+
+    </StackPanel>
+</UserControl>

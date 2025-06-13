@@ -1,0 +1,186 @@
+﻿<UserControl x:Class="ZhApi.WpfApp.LogItems.RequestControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ZhApi.WpfApp.LogItems"
+             mc:Ignorable="d"
+             Opacity="{Binding ErrorWarn.Opacity}"
+             d:Opacity="1"
+             Visibility="{Binding ErrorWarn.Visibility}"
+             Foreground="{DynamicResource TextE6}"
+             >
+    <d:UserControl.DataContext>
+        <local:RequestControlViewModel />
+    </d:UserControl.DataContext>
+    <StackPanel  x:Name="WrapPanel1">
+        <WrapPanel Orientation="Horizontal"
+                   Width="auto" HorizontalAlignment="Left">
+
+            <!-- 标题 -->
+            <Grid>
+                <TextBlock
+                    d:Text="标题"
+                    d:Foreground="White"
+                    Padding="5,0" >
+                    <Run Text="{Binding ErrorWarn.Title,Mode=OneWay}"
+                         /><Run Text="{Binding ErrorWarn.TitleTag}" />
+                </TextBlock>
+            </Grid>
+
+            <!-- 数量-->
+            <TextBlock Visibility="{Binding ErrorWarn.Total,
+                       Converter={StaticResource notDefautVisibility}}"
+                       Text="{Binding ErrorWarn.Total,StringFormat='{}{0:N0}'}" />
+
+            <TextBlock Visibility="{Binding ErrorWarn.CurrentVisibility}">
+                <Run Text="{Binding ErrorWarn.Current,StringFormat='/{0:N0}'}" />
+                <Run Text="{Binding ErrorWarn.Progress, Mode=OneWay,
+                     Converter={StaticResource percentageFormat}}"
+                     Foreground="{DynamicResource GreenYellow}" />
+            </TextBlock>
+
+            <!--响应 平均 预计 耗时 -->
+            <StackPanel Orientation="Horizontal">
+                <!--响应-->
+                <TextBlock
+                    ToolTip="{Binding ErrorWarn.RequestToolTip}"
+                    Visibility="{Binding ErrorWarn.TimeVisibility, Mode=OneWay}">
+                    <Run Text="," Foreground="{StaticResource LogText}" />
+                    <Run FontFamily="{StaticResource SymbolThemeFontFamily}"
+                         Foreground="{Binding ErrorWarn.TimeBrush}"
+                         Text="&#xE8AB;">
+                    </Run>
+                    <Run Text="{Binding ErrorWarn.Time,Converter={StaticResource secondFormat}}"
+                         Foreground="{StaticResource LogText}" />
+                </TextBlock>
+
+                <!--平均-->
+                <TextBlock Visibility="{Binding ErrorWarn.TimeVisibility}">
+                    <Run Text="," />
+                    <Run FontFamily="{StaticResource SymbolThemeFontFamily}"
+                         Foreground="LightCyan"
+                         Text="&#xE8EB;" />
+                    <Run Text="{Binding ErrorWarn.AverageTime,StringFormat='{}{0:N2}s'}"
+                         Foreground="{StaticResource LogText}" />
+                </TextBlock>
+
+                <!-- 预计 -->
+                <TextBlock
+                    Visibility="{Binding ErrorWarn.EstimatedTime,
+                    Converter={StaticResource notDefautVisibility}}">
+                    <Run Text="," />
+                    <Run FontFamily="{StaticResource SymbolThemeFontFamily}"
+                         Foreground="LightCyan"
+                         Text="&#xF739;" />
+                    <Run Text="{Binding ErrorWarn.EstimatedTime}"
+                         Foreground="{StaticResource LogText}" />
+                </TextBlock>
+
+                <!-- 耗时 -->
+                <TextBlock
+                    Visibility="{Binding ErrorWarn.TimeConsuming,
+                    Converter={StaticResource notDefautVisibility}}"
+                    >
+                    <Run Text="," />
+                    <Run FontFamily="{StaticResource SymbolThemeFontFamily}"
+                         Foreground="LightCyan"
+                         Text="&#xE823;" />
+                    <Run Text="{Binding ErrorWarn.TimeConsuming}"
+                         Foreground="{StaticResource LogText}" />
+                </TextBlock>
+
+            </StackPanel>
+
+            <!-- 错误异常重试 -->
+            <local:ErrorWarn DataContext="{Binding ErrorWarn}" />
+
+            <!-- 重试 -->
+            <TextBlock Visibility="{Binding ErrorWarn.RetryVisibility}"
+                       Foreground="{StaticResource LogText}" >
+                <Run FontFamily="{StaticResource SymbolThemeFontFamily}"
+                     Foreground="LightCyan"
+                     Text=" &#xE72C;" />
+                <Run Text="{Binding  ErrorWarn.Retry,StringFormat='{}{0:N0}'}"
+                     />
+                <Run Text="{Binding  ErrorWarn.RetryRate,Mode=OneWay,
+                     Converter={StaticResource percentageFormat}}"
+                     Foreground="{DynamicResource GreenYellow}" />
+            </TextBlock>
+
+            <!-- 异常、服务启用、Target -->
+            <StackPanel Orientation="Horizontal">
+                <StackPanel.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Margin" Value="5,0,0,0" />
+                        <Setter Property="Padding" Value="5,0" />
+                        <Setter Property="FontSize" Value="12" />
+                    </Style>
+                </StackPanel.Resources>
+
+                <!-- 处理目标 -->
+                <Border Visibility="{Binding ErrorWarn.Target,
+                        Converter={StaticResource notDefautVisibility}}"
+                        CornerRadius="3"
+                        Background="LightGreen"
+                        Height="13"
+                        Margin="5,0,0,0">
+                    <TextBlock
+                        Opacity="0.8"
+                        Margin="2,0"
+                        FontSize="11"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="Black"
+                        d:Text="Node"
+                        d:Visibility="Visible"
+                        Text= "{Binding ErrorWarn.Target}" />
+
+                </Border>
+
+
+
+                <!-- 服务未启用 -->
+                <TextBlock
+                    Visibility="{Binding ErrorWarn.EnableVisibility}"
+                    Background="LightGray"
+                    Foreground="Black"
+                    VerticalAlignment="Center"
+                    TextAlignment="Center"
+                    Text= "服务未启用 (enable = false)" />
+
+                <!-- 服务配置无效 -->
+                <TextBlock
+                    d:Text="异常提示"
+                    d:Visibility="Visible"
+                    Visibility="{Binding ErrorWarn.ErrorMessage,
+                    Converter={StaticResource notDefautVisibility}}"
+                    Background="DarkRed"
+                    Foreground="White"
+                    VerticalAlignment="Center"
+                    TextAlignment="Center"
+                    Text="{Binding ErrorWarn.ErrorMessage}" />
+
+                <!-- 启动标识 -->
+                <StackPanel
+                    Orientation="Horizontal"
+                    d:Visibility="Visible"
+                    Visibility="{Binding ErrorWarn.TranslateServiceVisibility}">
+                    <TextBlock
+                        Padding="0"
+                        Foreground="Gray"
+                        Text="启动服务"
+                        d:Text="启动服务" />
+                    <ProgressBar
+                        Margin="5,0,0,0"
+                        Width="20"
+                        IsIndeterminate="True"
+                        VerticalAlignment="Center" />
+                </StackPanel>
+            </StackPanel>
+
+            <local:RequestItems DataContext="{Binding ErrorWarn.RequestItems}" />
+            <!-- Width="{Binding ActualWidth, ElementName=WrapPanel1, Mode=OneWay}"  -->
+        </WrapPanel>
+    </StackPanel>
+</UserControl>

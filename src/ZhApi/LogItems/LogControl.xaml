@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="ZhApi.WpfApp.LogItems.LogControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ZhApi.WpfApp.LogItems"
+             mc:Ignorable="d"
+             Foreground="{StaticResource Textdim}">
+    <d:UserControl.DataContext>
+        <local:LogControlViewModel
+            Text="内容"
+            Foreground="White"
+            />
+    </d:UserControl.DataContext>
+    <Grid>
+        <TextBlock
+            Padding="5,0"
+            TextWrapping="Wrap"
+            Foreground="{Binding Foreground}"
+            Background="{Binding Background}"
+            d:Background="#861B2D"
+            ToolTip="{Binding ToolTip}"
+            Text="{Binding Text}"/>
+    </Grid>
+</UserControl>

@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="ZhApi.WpfApp.LogItems.ImportDataBaseUnit"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ZhApi.WpfApp.LogItems"
+             mc:Ignorable="d"
+             Foreground="{StaticResource TextE6}"
+             MinWidth="100"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             >
+
+    <d:UserControl.DataContext>
+        <local:ImportDataBaseUnitViewModel
+            Title="标题"
+            />
+    </d:UserControl.DataContext>
+
+    <UserControl.Resources>
+        <Storyboard x:Key="ChnageOpacity">
+            <DoubleAnimation
+                Storyboard.TargetProperty="Opacity"
+                Storyboard.TargetName="Panel"
+                From="1" To="0.6" Duration="0:0:1" />
+        </Storyboard>
+    </UserControl.Resources>
+    <i:Interaction.Triggers>
+        <i:DataTrigger Binding="{Binding IsEnd}" Value="true">
+            <i:ControlStoryboardAction Storyboard="{StaticResource ChnageOpacity}" />
+        </i:DataTrigger>
+    </i:Interaction.Triggers>
+
+    <StackPanel x:Name="Panel">
+        <!-- 标题 -->
+        <TextBlock Text="{Binding Title}" HorizontalAlignment="Center" />
+
+        <!-- 数量 -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Grid.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontSize" Value="12" />
+                    <Setter Property="Foreground" Value="DimGray" />
+                    <Setter Property="Padding" Value="3,0" />
+                </Style>
+            </Grid.Resources>
+
+            <TextBlock Grid.Column="0"
+                       HorizontalAlignment="Right"
+                       Text="{Binding Total,StringFormat='{}{0:N0}'}" />
+            <TextBlock Grid.Column="1" Text=":" />
+            <TextBlock Grid.Column="2"
+                       HorizontalAlignment="Left"
+                       Text="{Binding Current,StringFormat='{}{0:N0}'}" />
+        </Grid>
+
+        <!-- 进度条 -->
+        <ProgressBar Maximum="1" Width="100"
+                     Value="{Binding Progress,Mode=OneWay}" />
+
+        <!-- 进度文本 -->
+        <TextBlock Text="{Binding Progress,
+                   Converter={StaticResource percentageFormat}}"
+                   HorizontalAlignment="Center"
+                   FontSize="35" />
+
+        <!-- 数据库 -->
+        <local:DataBaseUnit DataContext="{Binding DataBase}" />
+    </StackPanel>
+</UserControl>
