@@ -125,7 +125,7 @@ success
 ### 翻译服务和修复列表配置
 字段 | 描述
 -- | -- 
-type | 翻译服务类型，可选： Ollama, DeepSeek, OpenAI
+type | 翻译服务类型，可选： Ollama, Bigmodel, DeepSeek, OpenAI
 title | 软件中显示的名称 | 
 model | 模型名称， Ollama 和 OpenAI 中必须指定
 target |默认(all), word(单词未翻译), node(节点丢失), fail(无中文、节点重复、多余), all
@@ -148,6 +148,21 @@ enable | 是否启用 。
     }
   ],
   //...
+}
+```
+#### 智谱AI  配置  
+```json
+{
+    "services": [
+    {
+      "type": "Bigmodel",   
+      // 申请地址 https://www.bigmodel.cn
+      "apikey" : "--必填--",
+      // 默认 ：glm-4-flash 
+      //"model" : "glm-4-flash"
+      "enable": true
+    }
+  ],
 }
 ```
 

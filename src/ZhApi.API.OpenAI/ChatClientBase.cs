@@ -30,7 +30,7 @@ public abstract class ChatClientBase<TConfig>(
     public override Task<string[]> GetModelsAsync() =>
         GetModelsAsync("/v1/models");
 
-    protected async Task<string[]> GetModelsAsync(string path)
+    protected virtual async Task<string[]> GetModelsAsync(string path)
     {
         var apiKey = Config.ApiKey?.Trim() ?? "__";
         var res = await httpClient.GetAsync(path)

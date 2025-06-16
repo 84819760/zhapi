@@ -134,7 +134,7 @@ file class Helper
 
         detail.Words = [.. words];
 
-        if (ContainChinese || words.Count < 10) return;
+        if (ContainChinese || words.Count < 5) return;
         detail.Error = "未包含中文";
     }
 

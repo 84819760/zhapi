@@ -248,5 +248,5 @@ public abstract class ChatBase : IModelPorvider, IEffectiveTesting
     }
     #endregion
 
-    public Task<bool> TestAsync() => testLazy.Value;
+    public virtual Task<bool> TestAsync() => testLazy.Value;
 }

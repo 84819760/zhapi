@@ -1,6 +1,4 @@
-﻿using System.Threading.Channels;
-
-namespace ZhApi.Services;
+﻿namespace ZhApi.Services;
 
 /// <summary>
 /// 负责创建预读内容
@@ -34,7 +32,7 @@ public class FileService : IDisposable
 
         maxLength = appConfig.Value.MaxLength ?? 5000;
         token = cts.Token;
-        channel = new ChannelTimeHandler<IRootData>(Handler, 15, token);
+        channel = new ChannelTimeHandler<IRootData>(Handler, 5, token);
     }
 
     public async Task SendAsync(XmlFileInfo info)
