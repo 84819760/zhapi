@@ -1,5 +1,5 @@
 # 简介
-使用大模型翻译.net xml 文档。支持ollama、DeepSeek 或兼容OpenAi接口的服务。
+使用大模型翻译.net xml 文档。支持ollama、智谱AI、DeepSeek 或兼容OpenAi接口的服务。
 ![image](imgs/logo.png) 
 
 ## 使用步骤
@@ -131,7 +131,7 @@ model | 模型名称， Ollama 和 OpenAI 中必须指定
 target |默认(all), word(单词未翻译), node(节点丢失), fail(无中文、节点重复、多余), all
 enable | 是否启用 。
 
-可选：timeout，parallelism，autoQueue。   
+可选：timeout，parallelism，maxLength。   
 其它设置可以在运行时通过日志(zhapi\logs)查看。
 
 ---
