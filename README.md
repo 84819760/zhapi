@@ -19,7 +19,7 @@
 - 建议至少8G显存，显卡支持列表: https://github.com/ollama/ollama/blob/main/docs/gpu.md   
 - 没有显卡的情况下CPU也可以用，不过太慢，建议配置DeepSeek或兼容OpenAi接口的网络模型服务(调用会产生费用)。
 
-> 优先考虑官方版本，特殊情况下使用专用版(未作测试)。
+> 优先考虑官方版本，特殊情况下使用专用版(未作测试)。      
 amd 专用版: https://github.com/likelovewant/ollama-for-amd     
 intel GPU专用版: https://github.com/intel/ipex-llm    
 
