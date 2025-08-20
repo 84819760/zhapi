@@ -94,7 +94,8 @@ success
 
   // (全局)并发数量(每个服务可单独设置)
   // 显卡性能较差时可设置为2，使用CPU时建议设置为1。
-  // 注意：在本地ollama模式和OpenAi（以及OpenAi派生模式Bigmodel, DeepSeek）混用时应考虑分开设置parallelism。避免全局parallelism设置过大导致本地ollama模式下的显卡性能下降。
+  // 注意：在本地ollama模式和OpenAi（以及OpenAi派生模式Bigmodel, DeepSeek）混用时应考虑分开设置parallelism。
+  // 避免全局parallelism设置过大导致本地ollama模式下的显卡性能下降。
   "parallelism":4,
 
   // (全局)按字符串长度总数拆分队列(每个服务可单独设置)，单个字符串超出长度的节点会被忽略。
