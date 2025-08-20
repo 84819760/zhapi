@@ -141,6 +141,7 @@ enable | 是否启用 。
   "services": [ 
     {
       "type": "ollama",
+      // "url":  "默认值: http://localhost:11434",
       "title": "待翻译",
       "model": "qwen3:4b",
       "enable": true
@@ -157,8 +158,7 @@ enable | 是否启用 。
       "type": "Bigmodel",   
       // 申请地址 https://www.bigmodel.cn
       "apikey" : "--必填--",
-      // 默认 ：glm-4-flash 
-      //"model" : "glm-4-flash"
+      //"model" : "默认值: glm-4-flash"
       "enable": true
     }
   ],
