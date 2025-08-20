@@ -71,7 +71,7 @@ success
 > zhapi 目录和配置文件，在第一次运行时生成。    
 
 配置文件 : `\zhapi\app_config.jsonc`
-```jsonc
+```json5
 {
   // 翻译服务列表(详情：翻译服务和修复列表配置)
   "services": [ ... ],
