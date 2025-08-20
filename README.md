@@ -129,7 +129,7 @@ target |默认(all), word(单词未翻译), node(节点丢失), fail(无中文�
 enable | 是否启用 。
 
 可选：timeout，parallelism，maxLength。   
-其它设置可以在运行时通过日志(zhapi\logs)查看。
+其它设置可以在运行时通过日志(zhapi\logs)查看。     
 注意：在本地ollama模式和openai（及派生模式Bigmodel, DeepSeek）混用时应考虑分开设置。避免全局parallelism设置过大导致本地ollama模式下的显卡性能下降。
 
 ---
