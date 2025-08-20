@@ -9,9 +9,6 @@ public class Config : Configs.ConfigBase
     [JsonProperty(Order = 4)]
     public string ApiKey { get; set; } = DefaultName;
 
-    [JsonPropertyOrder(6)]
-    [JsonProperty(Order = 6)]
-    public override int? Parallelism { get; set; } = Environment.ProcessorCount;
 
     [JsonPropertyOrder(6)]
     [JsonProperty(Order = 6)]

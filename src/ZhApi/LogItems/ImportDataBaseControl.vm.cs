@@ -99,12 +99,18 @@ public partial class ImportDataBaseControlViewModel : ControlProvider
         using var source = await new ImportSourceDataBase(service, dbPath)
             .InitAsync();
 
-        var tasks = new[]
-        {
-            SourceDb.RunAsync(source, local),
-            LocalDb.RunAsync(local, source),
-        };
-        await Task.WhenAll(tasks);
+        await Task.WhenAll([
+          SourceDb.ReadAsync(source, local),
+          LocalDb.ReadAsync(local, source),
+        ]);
+
+        await Task.WhenAll([
+          SourceDb.WriteAsync(source, local),
+          LocalDb.WriteAsync(local, source),
+        ]);
+
         DbContextBase.ClearAllPools();
     }
+
+
 }

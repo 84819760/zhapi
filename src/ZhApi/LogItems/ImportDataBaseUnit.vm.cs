@@ -30,15 +30,42 @@ public partial class ImportDataBaseUnitViewModel : ObservableObject
         Visibility = Visibility.Visible
     };
 
-    public Task RunAsync(ImportBase source, ImportBase target) =>
-    Task.Run(async () =>
+
+    public Task ReadAsync(ImportBase source, ImportBase target) => Task.Run(async () =>
     {
+        Current = 0;
         Total = source.Count;
-        await foreach (var item in source.GetRowsAsync())
+        Title = "读取差异";
+
+        using var sourceDb = await source.CreateDbContextAsync();
+        using var targetDb = await target.CreateDbContextAsync();
+
+        var sourceTab = sourceDb.KvRows.AsNoTracking();
+        var targetTab = targetDb.KvRows.AsNoTracking();
+
+        await foreach (var item in source.GetIdsAsync(sourceTab))
         {
             Current += item.Length;
-            await target.SendAsync(item);
+            await source.SendIdsAsync(item, targetTab);
         }
-        await target.Completion();
+
+        Title = "读取结束";
+    });
+
+    public Task WriteAsync(ImportBase source, ImportBase target) => Task.Run(async () =>
+    {
+        Current = 0;
+        Total = source.DiffCount;
+        Title = "写入差异";
+        GC.Collect();
+        using var sourceDb = await source.CreateDbContextAsync();
+        var sourceMap = new Dictionary<string, long>(100);
+        await foreach (var rows in source.GetDiffRows(sourceDb))
+        {
+            await target.SendRowsAsync(rows, sourceMap);
+            Current += rows.Length;
+        }
+
+        Title = "同步完成";       
     });
 }

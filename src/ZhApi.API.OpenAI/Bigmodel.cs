@@ -38,7 +38,5 @@ public class BigmodelConfig : Config
 
     [JsonPropertyOrder(2)]
     [JsonProperty(Order = 2)]
-    public override string? Model { get; set; } = "glm-4-flash";
-
-    public override int? Parallelism { get; set; } = 4;
+    public override string? Model { get; set; } = "glm-4-flash";   
 }

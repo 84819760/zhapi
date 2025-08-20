@@ -5,5 +5,5 @@ public class ImportLocalDataBase(IServiceProvider service) : ImportBase(service)
 {
     private readonly IDbContextFactory<KvDbContext> dbFactory = service.GetRequiredService<IDbContextFactory<KvDbContext>>();
 
-    protected override IDbContextFactory<KvDbContext> GetDbFactory() => dbFactory;
+    public override IDbContextFactory<KvDbContext> GetDbFactory() => dbFactory;
 }

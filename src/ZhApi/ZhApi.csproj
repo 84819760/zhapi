@@ -8,7 +8,7 @@
 		<UseWPF>true</UseWPF>
 		<ShadowCode_Injection_UseMethodName>UseZhApi_Wpf</ShadowCode_Injection_UseMethodName>
 		<RootNamespace>ZhApi.WpfApp</RootNamespace>
-		<Version>1.0.1</Version>
+		<Version>1.0.2</Version>
 		<ApplicationIcon>ico.ico</ApplicationIcon>
 	</PropertyGroup>
 
@@ -23,6 +23,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\ZhApi.Base\ZhApi.Base.csproj" />
+		<ProjectReference Include="..\zhapi.DirectoryAccess\zhapi.DirectoryAccess.csproj" />
 		<ProjectReference Include="..\ZhApi.Services\ZhApi.Services.csproj" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="*" />
 		<PackageReference Include="WPF-UI" Version="*" />

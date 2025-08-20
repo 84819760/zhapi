@@ -1,7 +1,9 @@
-﻿using ZhApi.Cores;
+﻿using ZhApi.Configs;
+using ZhApi.Cores;
 using ZhApi.SqliteDataBase;
 
 namespace ZhApi.WpfApp;
+
 /// <summary>
 /// Interaction logic for App.xaml
 /// </summary>
@@ -42,7 +44,8 @@ public partial class App : Application
                  .Add(ShadowCodeInjectionExtensions.UseZhApi_Wpf)
                  .Build().Service;
 
-        Service.GetRequiredService<UserIdentity>().TryAdministrator();
+        //Service.GetRequiredService<UserIdentity>().TryAdministrator();     
+        TestAccessRun();
 
         EnsureCreatedTask = DataBaseInit(Service);
     }
@@ -80,4 +83,13 @@ public partial class App : Application
         await db.Versions.AddAsync(new());
         await db.SaveChangesAsync();
     });
+
+    private static void TestAccessRun()
+    {
+        var dirs = Service
+            .GetRequiredService<IOptionsSnapshot<AppConfig>>()
+            .Value.GetDirectorys();
+
+        FileAccessHelper.TestAccessRun(dirs);
+    }
 }

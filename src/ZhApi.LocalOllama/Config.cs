@@ -32,8 +32,9 @@ public class Config : ConfigBase, IServiceConfig
 
 public class ExecInfo
 {
+    const string ollamaRoot = "%LOCALAPPDATA%\\Programs\\Ollama";
     private const StringComparison IgnoreCase = StringComparison.OrdinalIgnoreCase;
-    private const string ollamaPath = "%LOCALAPPDATA%\\Programs\\Ollama\\ollama app.exe";
+
     private static readonly SemaphoreSlim slim = new(1);
 
     /// <summary>
@@ -44,13 +45,17 @@ public class ExecInfo
     /// <summary>
     /// 监控进程对应的exe路径
     /// </summary>
-    public string? ExePath { get; init; } = ollamaPath;
+    public string? ExePath { get; init; } = $"{ollamaRoot}\\ollama app.exe";
 
     /// <summary>
     /// 调用路径(可能是批处理，因此和ExePath可能不同)
     /// </summary>
-    public string? CallPath { get; init; } = ollamaPath;
+    public string? CallPath { get; init; } = $"{ollamaRoot}\\ollama.exe";
 
+    /// <summary>
+    /// 调用参数
+    /// </summary>
+    public string? CallPathArgument { get; set; } = "ps";
 
     public Task TryExec() => Task.Run(CallExec);
 
@@ -68,7 +73,7 @@ public class ExecInfo
 
             // 调用bat或exe,用于启动监控exe
             var call = Environment.ExpandEnvironmentVariables(CallPath);
-            Process.Start(call);
+            CallExec(call, CallPathArgument);
 
             // 等待进程就绪(10秒)
             for (int i = 0; i < 10; i++)
@@ -94,6 +99,21 @@ public class ExecInfo
         {
             slim.Release();
         }
+    }
+
+    private static void CallExec(string exePath, string? callPathArgument)
+    {
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = exePath,
+            UseShellExecute = true,
+            WindowStyle = ProcessWindowStyle.Hidden,
+        };
+
+        if (callPathArgument is { Length: > 0 })
+            startInfo.Arguments = callPathArgument;
+
+        Process.Start(startInfo);
     }
 
     private static Process? GetProcess(string processName, string exePath)

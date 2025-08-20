@@ -110,7 +110,6 @@ public partial class AppConfig
                  Type = "ollama",
             },
         },
-        Admin = true,
         Ignores =
         [
             "\\microsoft.netcore.app.ref\\ * \\System.Runtime.Intrinsics.Xml",

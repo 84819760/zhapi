@@ -60,8 +60,8 @@ public partial class AppConfig : ObservableObject
     public int LogFileCount { get; set; } = 10;
     
 
-    [DefaultValue(9527)]
-    public bool Admin { get; set; }
+    //[DefaultValue(9527)]
+    //public bool Admin { get; set; }
 
     /// <summary>
     /// 检查版本的url
