@@ -19,7 +19,7 @@
 - 建议至少8G显存，显卡支持列表: https://github.com/ollama/ollama/blob/main/docs/gpu.md   
 - 没有显卡的情况下CPU也可以用，不过太慢，建议配置DeepSeek或兼容OpenAi接口的网络模型服务(调用会产生费用)。
 
-
+> 优先考虑官方版本，特殊情况下使用专用版(未作测试)。
 amd 专用版: https://github.com/likelovewant/ollama-for-amd     
 intel GPU专用版: https://github.com/intel/ipex-llm    
 
@@ -130,7 +130,7 @@ enable | 是否启用 。
 
 可选：timeout，parallelism，maxLength。   
 其它设置可以在运行时通过日志(zhapi\logs)查看。     
-注意：在本地ollama模式和openai（及派生模式Bigmodel, DeepSeek）混用时应考虑分开设置。避免全局parallelism设置过大导致本地ollama模式下的显卡性能下降。
+注意：在本地ollama模式和openai（及派生模式Bigmodel, DeepSeek）混用时应考虑分开设置全局parallelism。避免全局parallelism设置过大导致本地ollama模式下的显卡性能下降。
 
 ---
 
