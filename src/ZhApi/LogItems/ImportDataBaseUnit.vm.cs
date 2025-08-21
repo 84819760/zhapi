@@ -43,10 +43,11 @@ public partial class ImportDataBaseUnitViewModel : ObservableObject
         var sourceTab = sourceDb.KvRows.AsNoTracking();
         var targetTab = targetDb.KvRows.AsNoTracking();
 
-        await foreach (var item in source.GetIdsAsync(sourceTab))
+        await foreach (var rows in source.GetIdsAsync(sourceTab))
         {
-            Current += item.Length;
-            await source.SendIdsAsync(item, targetTab);
+            var ids = await new ReadIdHelper(rows).GetIdsAsync(targetTab);
+            source.SendIds(ids);
+            Current += rows.Length;
         }
 
         Title = "读取结束";
@@ -54,18 +55,19 @@ public partial class ImportDataBaseUnitViewModel : ObservableObject
 
     public Task WriteAsync(ImportBase source, ImportBase target) => Task.Run(async () =>
     {
+        const string title = "写入";
         Current = 0;
         Total = source.DiffCount;
-        Title = "写入差异";
-        GC.Collect();
+        Title = title;
         using var sourceDb = await source.CreateDbContextAsync();
         var sourceMap = new Dictionary<string, long>(100);
-        await foreach (var rows in source.GetDiffRows(sourceDb))
+        await foreach (var rows in source.GetKvRowSources(sourceDb))
         {
-            await target.SendRowsAsync(rows, sourceMap);
-            Current += rows.Length;
+            var diff = await target.SaveRowsAsync(rows, sourceMap);
+            Current += rows.Count;
+            Title = $"{title} {diff}";
         }
 
-        Title = "同步完成";       
+        Title = "同步完成";
     });
 }

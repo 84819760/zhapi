@@ -1,11 +1,15 @@
-﻿using System.Data;
+﻿using Microsoft.EntityFrameworkCore.Update;
+using System.Data;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using ZhApi.Cores;
 using ZhApi.Messages;
 
 namespace ZhApi.SqliteDataBase.Imports;
 public abstract class ImportBase : ICompletionTask, IDisposable
 {
-    private readonly ConcurrentBag<string> idMaps = [];
+    private readonly ConcurrentDictionary<string, RowInfoPack> idMaps = [];
     private readonly CancellationToken token;
     private readonly int pageSize;
     private readonly string target;
@@ -45,113 +49,116 @@ public abstract class ImportBase : ICompletionTask, IDisposable
         return this;
     }
 
-    public async IAsyncEnumerable<string[]> GetIdsAsync(IQueryable<KvRow> tab)
+    public async IAsyncEnumerable<RowInfo[]> GetIdsAsync(IQueryable<KvRow> tab)
     {
-        using var db = await GetDbFactory().CreateDbContextAsync();
-        var query = db.KvRows.AsNoTracking();
         var pageIndex = 0;
-
         while (true)
         {
             if (token.IsCancellationRequested) break;
-            var res = await query.Page(pageIndex, pageSize)
-                .Select(x => x.Id).ToArrayAsync();
+
+            var res = await tab.Page(pageIndex, pageSize)
+                .Select(x => new RowInfo(x.Id, x.UpdateTime))
+                .ToArrayAsync();
+
             if (res.Length is 0) break;
             yield return res;
             pageIndex++;
         }
     }
 
-    public async Task SendIdsAsync(string[] item, IQueryable<KvRow> targetTab)
+    public void SendIds(List<RowInfoPack> ids)
     {
-        var ids = item.ToHashSet();
-
-        var exists = await targetTab
-            .Where(x => ids.Contains(x.Id))
-            .Select(x => x.Id)
-            .ToHashSetAsync();
-
-        foreach (var id in ids.Except(exists))
-            idMaps.Add(id);
+        ids.ForEach(x => idMaps[x.Id] = x);
     }
 
-    public async IAsyncEnumerable<KvRowSource[]> GetDiffRows(KvDbContext db)
+    public async IAsyncEnumerable<List<KvRowSourcePack>> GetKvRowSources(KvDbContext db)
     {
         var kvTab = db.KvRows.AsNoTracking();
         var sourceTab = db.Sources.AsNoTracking();
-        var sourceMap = await sourceTab.ToDictionaryAsync(k => k.Id, v => v.Name);
-      
-        foreach (var item in idMaps.AsEnumerable().Chunk(pageSize))
+        foreach (var item in idMaps.Values.Chunk(pageSize))
         {
             if (token.IsCancellationRequested) yield break;
-            var ids = item.ToHashSet();
-            var q = from kv in kvTab
-                    join so in sourceTab
-                    on kv.SourceId equals Math.Abs(so.Id) into g
-                    from so in g.DefaultIfEmpty()
-                    where ids.Contains(kv.Id)
-                    select new KvRowSource
-                    {
-                        KvRow = kv,
-                        SourceName = so
-                    };
-            yield return await q.ToArrayAsync();
+            var ids = item.Select(x => x.Id).ToHashSet();
+            var rows = await GetKvRows(ids, kvTab, sourceTab).ToArrayAsync();
+            yield return rows.Select(CreateKvRowSourcePack).ToList();
         }
     }
 
-    public async Task SendRowsAsync(KvRowSource[] rows, Dictionary<string, long> map)
+    private KvRowSourcePack CreateKvRowSourcePack(KvRowSource row)
     {
-        await InitSourceMap(rows, map);
-        Array.ForEach(rows, x => x.UpdateSourceId(map));
-        using var db = await CreateDbContextAsync();
-        var count = await db.TryAdds(rows.Select(x => x.KvRow).ToArray());
-        NotifySaveRowCount(count);
+        var info = idMaps[row.KvRow.Id];
+        return new(row, info);
     }
 
-    private async Task InitSourceMap(KvRowSource[] rows, Dictionary<string, long> map)
+    private static IQueryable<KvRowSource> GetKvRows(HashSet<string> ids,
+        IQueryable<KvRow> kvTab, IQueryable<SourceName> sourceTab)
     {
-        var diffs = rows
-            .Select(x => x.GetSourceName())
-            .Distinct().Where(x => !map.ContainsKey(x))
-            .ToArray();
+        return from kv in kvTab.Where(x => ids.Contains(x.Id))
+               join source in sourceTab
+               on kv.SourceId equals Math.Abs(source.Id) into g
+               from so in g.DefaultIfEmpty()
+               select new KvRowSource(kv, so);
+    }
 
-        if (diffs.Length is 0) return;
+    public async Task<string> SaveRowsAsync(List<KvRowSourcePack> rows,
+        Dictionary<string, long> sourceMap)
+    {
+        await UpdateSourceNameAsync(rows, sourceMap);
+      return  await SaveRowsAsync(rows);
+    }
+
+    private async Task<string> SaveRowsAsync(List<KvRowSourcePack> rows)
+    {
+        if (rows.Count is 0) return string.Empty;
+        using var db = await CreateDbContextAsync();
+        var tab = db.KvRows;
+        var start = DateTime.Now;
+
+        foreach (var row in rows)
+        {
+            var item = row.KvRowSource.KvRow;
+            switch (row.RowInfoPack.State)
+            {
+                case EntityState.Modified:
+                    tab.Update(item);
+                    break;
+                case EntityState.Added:
+                    tab.Add(item);
+                    break;
+            }
+        }
+        var count = await db.SaveChangesAsync();    
+        var res =DateTime.Now - start;
+        NotifySaveRowCount(count);
+        return $"{res.TotalMilliseconds:N0}ms";
+    }
+
+    private async Task UpdateSourceNameAsync(List<KvRowSourcePack> row,
+        Dictionary<string, long> sourceMap)
+    {
+        var names = row.Select(x => x.SourceName).ToHashSet()
+            .Where(x => !sourceMap.ContainsKey(x)).ToArray();
+        if (names.Length is 0) return;
+
+        var ids = sourceMap.Values.ToHashSet();
+        var sourceNames = await GetSourceNamesAsync(names, ids);
+        sourceNames.ForEach(x => sourceMap[x.Name] = x.Id);
+        row.ForEach(x => x.SetSourceName(sourceMap));
+    }
+
+    private async Task<List<SourceName>> GetSourceNamesAsync(IEnumerable<string> names,
+        HashSet<long> ids)
+    {
         using var db = await CreateDbContextAsync();
         var tab = db.Sources;
-        foreach (var row in diffs)
+
+        foreach (var name in names)
         {
-            if (!await tab.AnyAsync(x => x.Name == row))
-                await db.Sources.AddAsync(new() { Name = row });
+            if (!await tab.AnyAsync(x => x.Name == name))
+                await tab.AddAsync(new() { Name = name });
         }
 
         await db.SaveChangesAsync();
-
-        var sources = await db.Sources.ToArrayAsync();
-
-        foreach (var item in sources)
-            map[item.Name] = item.Id;
-    }
-
-}
-
-public class KvRowSource
-{
-    public required KvRow KvRow { get; init; }
-
-    public SourceName? SourceName { get; init; }
-
-    public string GetSourceName() => SourceName?.Name ?? "数据库导入";
-
-    public void UpdateSourceId(Dictionary<string, long> map)
-    {
-        var sourceName = GetSourceName();
-        if (map.TryGetValue(sourceName, out var sourceId))
-        {
-            KvRow.SourceId = sourceId;
-        }
-        else
-        {
-            // 待补充（可能性？）
-        }
+        return await db.Sources.Where(x => !ids.Contains(x.Id)).AsNoTracking().ToListAsync();
     }
 }

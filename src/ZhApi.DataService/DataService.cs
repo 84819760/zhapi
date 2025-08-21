@@ -30,7 +30,7 @@ internal class DataService : IDataService
         {
             Filename = file,
             Connection = ConnectionType.Shared,
-            InitialSize = 1024 * 1024 * 66
+            InitialSize = 1024 * 1024 * 50 
         };
     }
 
@@ -61,7 +61,7 @@ internal class DataService : IDataService
     {
         var item = GetDsRootData(data);
         return WriteAsync(() => list.Insert(item));
-    } 
+    }
 
     public ObjectId this[string index] =>
         idMap.GetOrAdd(index, ObjectId.NewObjectId());
@@ -102,5 +102,5 @@ internal class DataService : IDataService
         {
         }
         GC.SuppressFinalize(this);
-    }  
+    }
 }

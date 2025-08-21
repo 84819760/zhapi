@@ -26,7 +26,6 @@ public partial class HomeAndStopViewModel(CancellationTokenSource cts) : Observa
         App.Home();
         App.Taskbar.StopIndeterminate();
         StopEnabled = false;
-        _ = 5000.DelayCollectAsync();
     }
 
     [RelayCommand]

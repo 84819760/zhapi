@@ -49,7 +49,7 @@ public partial class ImportDataBaseControlViewModel : ControlProvider
     /// </summary>
     public ImportDataBaseUnitViewModel SourceDb { get; } = new()
     {
-        Title = "源",
+        Title = "初始化:源",
         Target = nameof(ImportSourceDataBase)
     };
 
@@ -58,7 +58,7 @@ public partial class ImportDataBaseControlViewModel : ControlProvider
     /// </summary>
     public ImportDataBaseUnitViewModel LocalDb { get; } = new()
     {
-        Title = "本地",
+        Title = "初始化:本地",
         Target = nameof(ImportLocalDataBase),
     };
 
@@ -70,7 +70,7 @@ public partial class ImportDataBaseControlViewModel : ControlProvider
         try
         {
             AnimationVisibility = Visibility.Visible;
-            await ExecAsync(dbPath);
+            await Task.Run(() => ExecAsync(dbPath));
             Title = "完成";
         }
         catch (OperationCanceledException)
@@ -112,5 +112,5 @@ public partial class ImportDataBaseControlViewModel : ControlProvider
         DbContextBase.ClearAllPools();
     }
 
-
+  
 }

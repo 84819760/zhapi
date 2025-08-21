@@ -13,6 +13,7 @@ public class KvDbContext : DbContextBase, ITryAdds<KvRow>
 
     public DbSet<DataBaseVersion> Versions { get; init; } = null!;
 
+    public static KvDbContext Create(string dbPath) => Create(dbPath, new(1));
 
     public static KvDbContext Create(string dbPath, SemaphoreSlim slim) =>
         new(dbPath) { SemaphoreSlim = slim };

@@ -127,7 +127,7 @@ public partial class MainControlViewModel : ControlProvider
     }
 
     private async Task TranslateDrop(IEnumerable<XmlFileInfo> paths)
-    {        
+    {
         using var s = service.CreateScope();
         var sp = s.ServiceProvider;
         var logList = sp.GetRequiredKeyedService<ListControlViewModel>("scan");
@@ -180,7 +180,7 @@ public partial class MainControlViewModel : ControlProvider
         using var scop = this.service.CreateScope();
         var service = scop.ServiceProvider;
         var vm = service.GetRequiredService<ImportDataBaseControlViewModel>();
-        App.MainViewModel.ControlViewModel = vm;
+        this.AppInvoke(() => App.MainViewModel.ControlViewModel = vm);
         await vm.RunAsync(file);
         IsEnabled = true;
     }
@@ -210,7 +210,7 @@ public partial class MainControlViewModel : ControlProvider
 
     private async Task UpdateRepairCountAsync()
     {
-        using var db = await dbFactory.CreateDbContextAsync();       
+        using var db = await dbFactory.CreateDbContextAsync();
         await db.KvRows.Where(x => x.Score > 0)
             .ExecuteUpdateAsync(p => p
             .SetProperty(x => x.SourceId, x => Math.Abs(x.SourceId))

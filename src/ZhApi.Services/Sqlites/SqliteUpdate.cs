@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
 using ZhApi.Bases;
 using ZhApi.MicrosoftAI.Base;
 
@@ -8,7 +9,7 @@ public class SqliteUpdate : TranslateServiceBase, IFinalService
 {
     private readonly IDbContextFactory<KvDbContext> dbFactory;
     private readonly ChannelTimeHandler<IRootData> batch;
-    private readonly DateTime dateTime = DateTime.Now;
+    //private readonly DateTime dateTime = DateTime.Now;
     private readonly ScopedConfig scopedConfig;
     private readonly AppConfig appConfig;
     private readonly FileLog fileLog;
@@ -192,15 +193,17 @@ public class SqliteUpdate : TranslateServiceBase, IFinalService
         new DataBaseMessage(count, IsUpdate: true).SendMessage();
     }
 
-    private void Update(IRootData item, KvRow row)
+    private static void Update(IRootData item, KvRow row)
     {
         var score = item.GetScore();
         var value = (UpdateData)item.Tag!;
         row.RepairCount += 1;
+        var @now = DateTime.Now;
+
         if (value.IsUpdateSourceId)
         {
             row.SourceId = GetSourceId(row, score);
-            row.UpdateTime = dateTime;
+            row.UpdateTime = @now;
         }
 
         if (value.IsUpdateValue && score != null && score.Xml != null)
@@ -208,7 +211,7 @@ public class SqliteUpdate : TranslateServiceBase, IFinalService
             row.Tag = score.ErrorSimple ?? string.Empty;
             row.Translation = score.Xml;
             row.Score = score.Value;
-            row.UpdateTime = dateTime;
+            row.UpdateTime = @now;
         }
     }
 
