@@ -8,7 +8,7 @@
 		<UseWPF>true</UseWPF>
 		<ShadowCode_Injection_UseMethodName>UseZhApi_Wpf</ShadowCode_Injection_UseMethodName>
 		<RootNamespace>ZhApi.WpfApp</RootNamespace>
-		<Version>1.0.2</Version>
+		<Version>1.0.3</Version>
 		<ApplicationIcon>ico.ico</ApplicationIcon>
 	</PropertyGroup>
 
