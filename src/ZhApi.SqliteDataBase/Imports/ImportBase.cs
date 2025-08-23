@@ -93,7 +93,7 @@ public abstract class ImportBase : ICompletionTask, IDisposable
     {
         return from kv in kvTab.Where(x => ids.Contains(x.Id))
                join source in sourceTab
-               on kv.SourceId equals Math.Abs(source.Id) into g
+               on Math.Abs(kv.SourceId) equals Math.Abs(source.Id) into g
                from so in g.DefaultIfEmpty()
                select new KvRowSource(kv, so);
     }
