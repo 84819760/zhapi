@@ -1,4 +1,5 @@
 ﻿#pragma warning disable
+using Microsoft.Extensions.Options;
 using ZhApi.SqliteDataBase;
 
 namespace ZhApi;
@@ -24,5 +25,11 @@ public static class Extend
     {
         var skip = pageIndex * pageSize;
         return q.Skip(skip).Take(pageSize);
+    }
+
+    public static void UseSqliteParameterized(this DbContextOptionsBuilder options, string conn)
+    {
+        options.UseSqlite(conn, o => o.UseParameterizedCollectionMode(ParameterTranslationMode.Constant));
+     
     }
 }

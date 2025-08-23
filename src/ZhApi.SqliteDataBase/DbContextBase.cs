@@ -9,7 +9,10 @@ public abstract class DbContextBase : DbContext
     static DbContextBase() => AppDomain.CurrentDomain
          .ProcessExit += (_, _) => ClearAllPools();
 
-    public DbContextBase(DbContextOptions options) : base(options) { }
+    public DbContextBase(DbContextOptions options) : base(options)
+    {
+
+    }
 
     public DbContextBase(string dbPath) => this.dbPath = dbPath;
 
@@ -21,7 +24,7 @@ public abstract class DbContextBase : DbContext
     {
         if (dbPath is { Length: > 0 })
         {
-            optionsBuilder.UseSqlite($"Data Source={dbPath}");
+            optionsBuilder.UseSqliteParameterized($"Data Source={dbPath}");
         }
         else
         {

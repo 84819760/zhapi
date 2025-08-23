@@ -55,11 +55,9 @@ public abstract class ImportBase : ICompletionTask, IDisposable
         while (true)
         {
             if (token.IsCancellationRequested) break;
-
             var res = await tab.Page(pageIndex, pageSize)
                 .Select(x => new RowInfo(x.Id, x.UpdateTime))
                 .ToArrayAsync();
-
             if (res.Length is 0) break;
             yield return res;
             pageIndex++;

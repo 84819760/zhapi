@@ -12,6 +12,7 @@ partial class ShadowCodeInjectionExtensions
         service.AddDbContext<KvDbContext>(UseSqlite);
         service.AddPooledDbContextFactory<KvDbContext>(UseSqlite);
 
-        void UseSqlite(DbContextOptionsBuilder builder) => builder.UseSqlite(conn);
+        void UseSqlite(DbContextOptionsBuilder builder) =>
+            builder.UseSqliteParameterized(conn);
     }
 }
