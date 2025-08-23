@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net9.0-windows</TargetFramework>
+		<TargetFramework>net10.0-windows7.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UseWPF>true</UseWPF>
@@ -10,6 +10,14 @@
 		<RootNamespace>ZhApi.WpfApp</RootNamespace>
 		<Version>1.0.3</Version>
 		<ApplicationIcon>ico.ico</ApplicationIcon>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <NoWarn>CA2254;IDE0079;IDE0305;CA1873;</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <NoWarn>CA2254;IDE0079;IDE0305;CA1873;</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
