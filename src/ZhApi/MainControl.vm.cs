@@ -105,12 +105,16 @@ public partial class MainControlViewModel : ControlProvider
     {
         if (File.Exists(path))
         {
-            var helper = new PackHelper(path);
-            if (helper.IsTargetFile())
-                return GetXmlFileInfos([.. helper.GetPackDirectorys()])
-                    .Where(IsTarget);
+            var extension = Path.GetExtension(path).ToLower();
+            if (PackHelper.IsTargetFile(extension))
+            {
+                var roots = appConfig.CurrentValue.GetDirectorys();
+                var packHelper = new PackHelper(roots);
+                var dirs = packHelper.GetPackDirectorys(path).ToArray();
+                return GetXmlFileInfos(dirs);
+            }
 
-            if (helper.Extension is ".xml" && !IsZhHhans(path))
+            if (extension is ".xml" && !IsZhHhans(path))
                 return [new(path)];
         }
         else if (Directory.Exists(path))
