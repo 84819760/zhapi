@@ -44,8 +44,6 @@ public partial class App : Application
         Service = new AppBuilder()
                  .Add(ShadowCodeInjectionExtensions.UseZhApi_Wpf)
                  .Build().Service;
-   
-        TestAccessRun();
 
         EnsureCreatedTask = DataBaseInit(Service);
     }
@@ -82,7 +80,7 @@ public partial class App : Application
         await db.SaveChangesAsync();
     });
 
-    private static void TestAccessRun()
+    internal static void TestAccessRun()
     {
         var dirs = Service
             .GetRequiredService<IOptionsSnapshot<AppConfig>>()

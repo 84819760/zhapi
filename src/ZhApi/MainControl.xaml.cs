@@ -12,6 +12,7 @@ public partial class MainControl : UserControl
     private async void UserControl_Loaded(object sender, RoutedEventArgs e)
     {
         await App.EnsureCreatedTask;
+        App.TestAccessRun();
         mainModel.ButtonsVisibility = Visibility.Visible;
         await Task.Run(mainModel.SetRepairCountAsync);
     }
