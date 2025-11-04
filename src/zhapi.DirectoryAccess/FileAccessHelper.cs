@@ -12,7 +12,8 @@ public static class FileAccessHelper
     {
         var di = new DirectoryInfo(directory);
         var ds = di.GetAccessControl(AccessControlSections.Access);
-        foreach (FileSystemAccessRule rule in ds.GetAccessRules(true, true, typeof(System.Security.Principal.NTAccount)))
+        var nTAccount = typeof(System.Security.Principal.NTAccount);
+        foreach (FileSystemAccessRule rule in ds.GetAccessRules(true, true, nTAccount))
         {
             var fsr = rule.FileSystemRights;
             if (fsr.HasFlag(FileSystemRights.Modify) &&

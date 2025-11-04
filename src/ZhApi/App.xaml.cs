@@ -1,4 +1,5 @@
-﻿using ZhApi.Configs;
+﻿using System.Runtime.CompilerServices;
+using ZhApi.Configs;
 using ZhApi.Cores;
 using ZhApi.SqliteDataBase;
 
@@ -43,23 +44,20 @@ public partial class App : Application
         Service = new AppBuilder()
                  .Add(ShadowCodeInjectionExtensions.UseZhApi_Wpf)
                  .Build().Service;
-
-        //Service.GetRequiredService<UserIdentity>().TryAdministrator();     
+   
         TestAccessRun();
 
         EnsureCreatedTask = DataBaseInit(Service);
     }
 
-    internal static void ErrorHandler(Exception? exception, string source)
+    internal static void ErrorHandler(Exception? exception, [CallerMemberName] string source = "")
     {
         if (exception is null) return;
         fileLog.LogError("未处理异常：{source}\r\n{ex}", source, exception.ToString());
-        fileLog.Flush();
     }
 
     protected override void OnStartup(StartupEventArgs e)
     {
-        fileLog.LogInformation("程序启动");
         Service.GetRequiredService<MainWindow>().Show();
     }
 
@@ -90,6 +88,15 @@ public partial class App : Application
             .GetRequiredService<IOptionsSnapshot<AppConfig>>()
             .Value.GetDirectorys();
 
-        FileAccessHelper.TestAccessRun(dirs);
+        try
+        {
+            FileAccessHelper.TestAccessRun(dirs);
+        }
+        catch (Exception ex)
+        {
+            ErrorHandler(ex);
+            MessageBox.Show("可能会导致无法写入数据。", "权限调整失败",
+                MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
     }
 }

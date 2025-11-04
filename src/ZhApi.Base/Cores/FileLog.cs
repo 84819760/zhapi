@@ -25,6 +25,8 @@ public class FileLog : LoggerBase
         fs = new(logFilePath, FileMode.OpenOrCreate,
             FileAccess.ReadWrite, FileShare.ReadWrite);
         writer = new StreamWriter(fs) { AutoFlush = true };
+
+        this.LogInformation("程序启动");
     }
 
     static FileLog()
@@ -119,8 +121,5 @@ public class FileLog : LoggerBase
         if (IsEnabled(logLevel)) action(this);
         return this;
     }
-
-
-    public void Flush() => writer.Flush();
 
 }

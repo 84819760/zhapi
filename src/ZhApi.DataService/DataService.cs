@@ -98,9 +98,7 @@ internal class DataService : IDataService
         {
             liteDatabase.Dispose();
         }
-        catch (Exception)
-        {
-        }
+        finally { }
         GC.SuppressFinalize(this);
     }
 }
