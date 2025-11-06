@@ -80,8 +80,13 @@ public partial class App : Application
         await db.SaveChangesAsync();
     });
 
+
+    private static bool isTestAccess;
     internal static void TestAccessRun()
     {
+        if (isTestAccess) return;
+        isTestAccess = true;
+
         var dirs = Service
             .GetRequiredService<IOptionsSnapshot<AppConfig>>()
             .Value.GetDirectorys();

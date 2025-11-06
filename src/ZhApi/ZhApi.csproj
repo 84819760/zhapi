@@ -41,4 +41,9 @@
 		</PackageReference>
 	</ItemGroup>
 
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\csharp-project-helpers\src\CSharpProject.Helpers\CSharpProject.Helpers.csproj" />
+	</ItemGroup>
+
+
 </Project>
