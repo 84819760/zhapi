@@ -141,8 +141,7 @@ public partial class ListControlViewModel : ControlProvider,
     private int GetLastLogIndex()
     {
         var index = 0;
-        var items = Items.ToArray();
-        items.Reverse();
+        var items = Items.Reverse().ToArray();
         foreach (var item in items)
         {
             if (item is LogControlViewModel) break;

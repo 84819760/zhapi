@@ -2,14 +2,22 @@
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net9.0-windows</TargetFramework>
+		<TargetFramework>net10.0-windows7.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UseWPF>true</UseWPF>
 		<ShadowCode_Injection_UseMethodName>UseZhApi_Wpf</ShadowCode_Injection_UseMethodName>
 		<RootNamespace>ZhApi.WpfApp</RootNamespace>
-		<Version>1.0.3</Version>
+		<Version>1.0.4</Version>
 		<ApplicationIcon>ico.ico</ApplicationIcon>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <NoWarn>CA2254;IDE0079;IDE0305;CA1873;</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <NoWarn>CA2254;IDE0079;IDE0305;CA1873;</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -32,5 +40,10 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\csharp-project-helpers\src\CSharpProject.Helpers\CSharpProject.Helpers.csproj" />
+	</ItemGroup>
+
 
 </Project>

@@ -1,0 +1,20 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/Services/">
+    <Project Path="src/ZhApi.API.OpenAI/ZhApi.API.OpenAI.csproj" />
+    <Project Path="src/ZhApi.DataService/ZhApi.DataService.csproj" />
+    <Project Path="src/ZhApi.LocalOllama/ZhApi.LocalOllama.csproj" />
+    <Project Path="src/ZhApi.MicrosoftAI.Base/ZhApi.MicrosoftAI.Base.csproj" />
+    <Project Path="src/ZhApi.SqliteDataBase/ZhApi.SqliteDataBase.csproj" />
+  </Folder>
+  <Project Path="../csharp-project-helpers/src/CSharpProject.Helpers/CSharpProject.Helpers.csproj" />
+  <Project Path="src/ZhApi.Base/ZhApi.Base.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="src/zhapi.DirectoryAccess/zhapi.DirectoryAccess.csproj" />
+  <Project Path="src/ZhApi.Services/ZhApi.Services.csproj" />
+  <Project Path="src/ZhApi/ZhApi.csproj" />
+</Solution>

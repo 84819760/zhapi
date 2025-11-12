@@ -1,4 +1,5 @@
-﻿using ZhApi.Configs;
+﻿using CSharpProject.Helpers;
+using ZhApi.Configs;
 using ZhApi.Cores;
 using ZhApi.SqliteDataBase;
 
@@ -105,16 +106,12 @@ public partial class MainControlViewModel : ControlProvider
     {
         if (File.Exists(path))
         {
-            var extension = Path.GetExtension(path).ToLower();
-            if (PackHelper.IsTargetFile(extension))
-            {
-                var roots = appConfig.CurrentValue.GetDirectorys();
-                var packHelper = new PackHelper(roots);
-                var dirs = packHelper.GetPackDirectorys(path).ToArray();
-                return GetXmlFileInfos(dirs);
-            }
+            var helper = new PackHelper(path);
+            if (helper.IsTargetFile())
+                return GetXmlFileInfos([.. helper.GetPackDirectorys()])
+                    .Where(IsTarget);
 
-            if (extension is ".xml" && !IsZhHhans(path))
+            if (helper.Extension is ".xml" && !IsZhHhans(path))
                 return [new(path)];
         }
         else if (Directory.Exists(path))

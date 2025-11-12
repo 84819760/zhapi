@@ -87,14 +87,14 @@ public class SqliteNewRow : TranslateServiceBase, IFinalService
 
     private async Task AddKvAsync(IRootData data, ScoreData? score)
     {
-        const string invalid = "无效数据";
         var rd = score?.Detail.ResponseData;
-        var modelName = rd?.ModelInfo.ModelName ?? invalid;
+        var modelName = rd?.ModelInfo.ModelName ?? "无效名称";
         var sourceId = await sourceName.GetSourceIdAsync(modelName);
+        var empty = string.Empty;
         var kv = new KvRow
         {
-            Translation = score?.Xml ?? string.Empty,
-            Tag = score?.ErrorSimple ?? invalid,
+            Translation = score?.Xml ?? empty,
+            Tag = score?.ErrorSimple ?? empty,
             Callback = () => Complete(data.Index),
             Score = score?.Value ?? 2000,
             Original = data.OriginalXml,

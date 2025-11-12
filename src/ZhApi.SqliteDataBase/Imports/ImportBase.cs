@@ -55,11 +55,9 @@ public abstract class ImportBase : ICompletionTask, IDisposable
         while (true)
         {
             if (token.IsCancellationRequested) break;
-
             var res = await tab.Page(pageIndex, pageSize)
                 .Select(x => new RowInfo(x.Id, x.UpdateTime))
                 .ToArrayAsync();
-
             if (res.Length is 0) break;
             yield return res;
             pageIndex++;
@@ -95,7 +93,7 @@ public abstract class ImportBase : ICompletionTask, IDisposable
     {
         return from kv in kvTab.Where(x => ids.Contains(x.Id))
                join source in sourceTab
-               on kv.SourceId equals Math.Abs(source.Id) into g
+               on Math.Abs(kv.SourceId) equals Math.Abs(source.Id) into g
                from so in g.DefaultIfEmpty()
                select new KvRowSource(kv, so);
     }
