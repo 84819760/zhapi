@@ -8,7 +8,7 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="OllamaSharp" Version="*" />
+		<PackageReference Include="OllamaSharp" Version="5.4.25" />
 		<PackageReference Include="ShadowCode.Injection" Version="*">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

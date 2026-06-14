@@ -57,6 +57,7 @@ public abstract class TranslateServiceBase(IServiceProvider service) : ITranslat
         new TranslateServiceStateMessage(this, TranslateServiceState.End)
             .SendMessage();
 
+        if (this is IStopModel sm) sm.StopModel();
         if (Next is null) return;
         Next.Start();
         await Next.Completion();

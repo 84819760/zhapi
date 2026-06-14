@@ -222,6 +222,42 @@ public partial class RepairXml
 
     #endregion
 
+    #region  Markdown
+    [GeneratedRegex(@"```xml\s*([\s\S]*?)```")]
+    private static partial Regex MarkdownRegex();
+
+    [GeneratedRegex(@"<root[^>]*>(.*?)</root>")]
+    private static partial Regex RootRegex();
+
+    public static string RepairMarkdown(string value)
+    {
+        if (MarkdownRegex().Count(value) > 0) return value;
+        return $"""
+        ```xml
+        {value}
+        ```
+        """;
+    }
+
+    public static string RepairRoot(string value)
+    {
+        if (RootRegex().Count(value) > 0) return value;
+
+        return Extends.StringBuild(sb =>
+        {
+            sb.Append(value);
+            var mds = MarkdownRegex().Matches(value).Reverse();
+            foreach (var item in mds)
+            {
+                var v = item.Groups[1];
+                var end = v.Index + v.Length;
+                sb.Insert(end, "</root>\r\n");
+                sb.Insert(v.Index, "<root>\r\n");
+            }
+        });
+    }
+    #endregion
+
     [GeneratedRegex(@"(?<=[\u4E00-\u9FFF]+)\s+(?=[\u4E00-\u9FFF]+)")]
     private static partial Regex ZhSpaceRegex();
 
@@ -232,11 +268,13 @@ public partial class RepairXml
         foreach (var item in items)
             sb.Remove(item.Index, item.Length);
     });
+      
 
 
     public static string Repair(string value)
     {
         var res = Replace(value);
+
         res = WhiteSpace(res);
         res = ReplaceVid(res);
 
@@ -261,6 +299,9 @@ public partial class RepairXml
 
         res = ZhSpace(res);
 
+        res = RepairMarkdown(res);
+        res = RepairRoot(res);
+
         if (value != res)
         {
             var msg = $"""
@@ -279,9 +320,9 @@ public partial class RepairXml
         return res;
     }
 
+
+
     private static string Replace(string value) => value
-    .Replace("<根>", "<root>")
-    .Replace("</根>", "</root>")
     .Replace("＝", "=")
     .Replace("＜", "<")
     .Replace("＞", ">")
@@ -298,6 +339,8 @@ public partial class RepairXml
 
     .Replace("《v id=", "<v id=")
     .Replace("\" /》", "\" />")
+    .Replace("<根>", "<root>")
+    .Replace("</根>", "</root>")
     ;
 }
 

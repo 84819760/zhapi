@@ -4,7 +4,7 @@ using ZhApi.Configs;
 
 namespace ZhApi.Cores;
 
-[DebuggerDisplay("{RequestIndex} {Response}")]
+[DebuggerDisplay("{RequestId} {Response}")]
 public record class ResponseData
 {
     public required ChatMessage[] Messages

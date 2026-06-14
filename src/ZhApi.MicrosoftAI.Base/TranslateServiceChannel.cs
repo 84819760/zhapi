@@ -125,6 +125,11 @@ public abstract class TranslateServiceChannel :
         if (data.IsTimeout())
             return true;
 
+        if (score is null && index > 10)
+        {
+            // 待补充
+        }
+
         if (score is null)
             return false;
 

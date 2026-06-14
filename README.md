@@ -53,15 +53,14 @@ ollama pull 模型名称
 或
 ollama run 模型名称
 ```
-> 例如 qwen3:4b 键入: ollama pull qwen3:4b
+> 例如 qwen3.5:4b 键入: ollama pull qwen3.5:4b
 ```bat
-C:\Users>ollama pull qwen3:4b
+C:\Users>ollama pull qwen3.5:4b
 pulling manifest
-pulling 163553aea1b1: 100% ▕███████████████████████████████▏ 2.6 GB
-pulling ae370d884f10: 100% ▕███████████████████████████████▏ 1.7 KB
-pulling d18a5cc71b84: 100% ▕███████████████████████████████▏  11 KB
-pulling cff3f395ef37: 100% ▕███████████████████████████████▏  120 B
-pulling 5efd52d6d9f2: 100% ▕███████████████████████████████▏  487 B
+pulling 81fb60c7daa8: 100% ▕███████████████████████████████▏ 3.4 GB
+pulling 7339fa418c9a: 100% ▕███████████████████████████████▏  11 KB
+pulling 9371364b27a5: 100% ▕███████████████████████████████▏   65 B
+pulling de9fed2251b3: 100% ▕███████████████████████████████▏  475 B
 verifying sha256 digest
 writing manifest
 success
@@ -144,7 +143,7 @@ enable | 是否启用 。
       "type": "ollama",
       // "url":  "默认值: http://localhost:11434",
       "title": "待翻译",
-      "model": "qwen3:4b",
+      "model": "qwen3.5:4b",
       "enable": true
     }
   ],
@@ -207,7 +206,7 @@ enable | 是否启用 。
     {
       "type": "ollama",
       "title": "待翻译",
-      "model": "qwen3:4b 或 gemma3:4b",
+      "model": "qwen3.5:4b 或 gemma3:4b",
       "enable": true
     },
 
@@ -215,7 +214,7 @@ enable | 是否启用 。
     {
       "type": "ollama",
       "title": "重试",
-      "model": "qwen3:8b 或 llama3.1:8b",   
+      "model": "qwen3.5:9b 或 llama3.1:8b",   
 
       // 重试策略
       "retry": {
@@ -262,7 +261,7 @@ enable | 是否启用 。
     {
       "type": "ollama",
       "title": "待处理",
-      "model": "qwen3:4b 或 gemma3:4b",   
+      "model": "qwen3.5:4b 或 gemma3:4b",   
       "retry": {"max": 5}, // 重试策略
       "timeout" : 30, // 超时设置
       "enable": true
@@ -271,7 +270,7 @@ enable | 是否启用 。
     {
       "type": "ollama",
       "title": "重试",
-      "model": "qwen3:8b 或 llama3.1:8b",       
+      "model": "qwen3.5:9b 或 llama3.1:8b",       
       "retry": {"max": 5}, // 重试策略      
       "timeout" : 300, // 超时设置
       "target": "node, fail",// 只处理 节点丢失 和 翻译错误的内容
@@ -284,6 +283,9 @@ enable | 是否启用 。
 
 
 # 常见问题
+## qwen3:4b 慢
+ollama 更新到0.30.7后，直接用 `qwen3:4b`无法关闭思考模式，因此响应速度非常慢(`qwen3.5:4b` 目前正常)，如果坚持使用3.0 可以使用`qwen3:4b-instruct`
+
 ## 翻译速度问题
 利用显卡和大模型翻译还是比较慢，例如`Npgsql.EntityFrameworkCore.PostgreSQL.xml` 大约1362个节点，在显卡RTX2060 + qwen3:4b 下需要 8.1分钟，为了提升翻译速度建议如下：   
 1. 下载现有的数据库 (dbs\kv.7z) 解压到zhapi目录中覆盖`kv.db`，或者同步数据库。   

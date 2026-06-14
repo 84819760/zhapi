@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 using Pathoschild.Http.Client;
 namespace ZhApi.MicrosoftAI.Base;
 
@@ -102,8 +103,8 @@ public abstract class ChatBase : IModelPorvider, IEffectiveTesting
             .SendMessage();
 
         if (!config.IsOk)
-        new TranslateServiceStateMessage(ts, TranslateServiceState.End)
-                .SendMessage();
+            new TranslateServiceStateMessage(ts, TranslateServiceState.End)
+                    .SendMessage();
     }
 
     protected virtual Task ReadyBody() => Task.CompletedTask;
@@ -125,7 +126,7 @@ public abstract class ChatBase : IModelPorvider, IEffectiveTesting
         var start = DateTime.Now;
         try
         {
-            var content = await GetAsync(messages).WaitAsync(token);
+            var content = await GetAsync(messages).WaitAsync(token);          
             res.Response = RepairXml.Repair(content);
         }
         catch (Exception ex)
@@ -153,7 +154,7 @@ public abstract class ChatBase : IModelPorvider, IEffectiveTesting
 
         var prompt = score.GetRetryMessage();
         yield return new(ChatRole.User, prompt);
-    }   
+    }
 
     private async Task<ResponseData> RequestAsync(string request, int retryIndex, ScoreData? score)
     {
